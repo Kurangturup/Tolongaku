@@ -55,12 +55,11 @@
   </style>
 </head>
 
-
 <body>
   <div id="video-container">
     <video id="video-player" controls>
       <!-- Ganti 'nama_video.mp4' dengan URL video yang ingin ditampilkan -->
-      <!-- Menampilkan video yang diambil dari data di listkuData -->
+      <!-- Menampilkan video yang diambil dari data di videoData -->
       <source src="" type="video/mp4">
       Your browser does not support the video tag.
     </video>
@@ -68,14 +67,31 @@
 
   <div id="content-container">
     <div id="list-container">
-      <!-- Menampilkan menu list yang diambil dari data di listkuData -->
+      <!-- Menampilkan menu list yang diambil dari data di videoData -->
     </div>
   </div>
 
+  <!-- Firebase konfigurasi SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
   <script>
-    // Mengambil data dari Local Storage (jika ada)
-    const existingData = localStorage.getItem('listkuData');
-    const dataList = existingData ? JSON.parse(existingData) : [];
+    const firebaseConfig = {
+      apiKey: "AIzaSyBS6SuOBuGWjvXsmvxbIY8W4RBLmJA_rWU",
+      authDomain: "liveku-6d19a.firebaseapp.com",
+      databaseURL: "https://liveku-6d19a.firebaseio.com",
+      projectId: "liveku-6d19a",
+      storageBucket: "liveku-6d19a.appspot.com",
+      messagingSenderId: "767731473859",
+      appId: "1:767731473859:web:c67039f456a97ed2663176",
+      measurementId: "G-RH38GQTY6P"
+    };
+
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Referensi ke Firebase Database
+    const database = firebase.database();
 
     // Fungsi untuk menampilkan video sesuai dengan URL
     function playVideo(url) {
@@ -84,18 +100,30 @@
       videoPlayer.load();
     }
 
-    // Menampilkan menu list di index.html
+    // Menampilkan menu list di index.html dari Firebase Database
     const listContainer = document.getElementById('list-container');
-    dataList.forEach((item, index) => {
-      const menuItem = document.createElement('div');
-      menuItem.classList.add('square');
-      menuItem.textContent = item.video.title;
-      menuItem.style.backgroundColor = '#3498db';
-      menuItem.style.cursor = 'pointer';
-      menuItem.addEventListener('click', () => {
-        playVideo(item.video.url);
-      });
-      listContainer.appendChild(menuItem);
+    const videoDataRef = database.ref('videoData');
+
+    videoDataRef.on('value', (snapshot) => {
+      // Hapus konten list-container agar data yang baru ditampilkan
+      listContainer.innerHTML = '';
+
+      // Ambil data snapshot dari Firebase
+      const dataList = snapshot.val();
+
+      // Loop melalui data dan tampilkan di list-container
+      for (const key in dataList) {
+        const item = dataList[key];
+        const menuItem = document.createElement('div');
+        menuItem.classList.add('square');
+        menuItem.textContent = item.video.title;
+        menuItem.style.backgroundColor = '#3498db';
+        menuItem.style.cursor = 'pointer';
+        menuItem.addEventListener('click', () => {
+          playVideo(item.video.url);
+        });
+        listContainer.appendChild(menuItem);
+      }
     });
   </script>
 </body>

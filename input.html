@@ -17,45 +17,46 @@
     <input type="submit" value="Submit">
   </form>
 
+  <!-- Firebase konfigurasi SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
   <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBS6SuOBuGWjvXsmvxbIY8W4RBLmJA_rWU",
+      authDomain: "liveku-6d19a.firebaseapp.com",
+      databaseURL: "https://liveku-6d19a.firebaseio.com",
+      projectId: "liveku-6d19a",
+      storageBucket: "liveku-6d19a.appspot.com",
+      messagingSenderId: "767731473859",
+      appId: "1:767731473859:web:c67039f456a97ed2663176",
+      measurementId: "G-RH38GQTY6P"
+    };
+
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Referensi ke Firebase Database
+    const database = firebase.database();
+
     document.getElementById('dataForm').addEventListener('submit', function (event) {
       event.preventDefault();
       const title = document.getElementById('title').value;
       const url = document.getElementById('url').value;
 
-      // Kirim data ke server atau build process menggunakan metode lain untuk menyimpan data ke listku.js
-      // Dalam lingkungan browser, JavaScript tidak dapat langsung menulis file lokal tanpa izin khusus.
+      // Simpan data ke Firebase Database
+      const newDataRef = database.ref('videoData').push();
+      newDataRef.set({
+        "video": {
+          "title": title,
+          "url": url
+        }
+      });
+
+      // Beri respon bahwa data berhasil ditambahkan
+      alert('Data berhasil ditambahkan!');
     });
   </script>
-<!-- Kode yang sama seperti yang Anda berikan pada input.html -->
-<!-- ... -->
-
-<script>
-  document.getElementById('dataForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-    const title = document.getElementById('title').value;
-    const url = document.getElementById('url').value;
-
-    // Mendapatkan data yang sudah ada di Local Storage (jika ada)
-    const existingData = localStorage.getItem('listkuData');
-    const dataList = existingData ? JSON.parse(existingData) : [];
-
-    // Tambahkan data baru ke dataList
-    dataList.push({
-      "video": {
-        "title": title,
-        "url": url
-      }
-    });
-
-    // Simpan dataList ke Local Storage
-    localStorage.setItem('listkuData', JSON.stringify(dataList));
-
-    // Kembali ke halaman index.html setelah menyimpan data
-    window.location.href = 'index.html';
-  });
-</script>
-
 </body>
 
 </html>
