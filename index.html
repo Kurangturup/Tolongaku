@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout Video dan List Persegi Panjang</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    #video-container {
+      position: top;
+      width: 100%;
+      height: 110%;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10%;
+    }
+
+    #video-player {
+      width: 100%;
+      height: 30vh;
+      object-fit: cover;
+    }
+
+    #content-container {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    #list-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      margin-top: 20px;
+    }
+
+    .square {
+      width: 400px;
+      height: 70px;
+      background-color: #3498db;
+      margin: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+
+<body>
+  <div id="video-container">
+    <video id="video-player" controls>
+      <!-- Ganti 'nama_video.mp4' dengan URL video yang ingin ditampilkan -->
+      <!-- Menampilkan video yang diambil dari data di listkuData -->
+      <source src="" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <div id="content-container">
+    <div id="list-container">
+      <!-- Menampilkan menu list yang diambil dari data di listkuData -->
+    </div>
+  </div>
+
+  <script>
+    // Mengambil data dari Local Storage (jika ada)
+    const existingData = localStorage.getItem('listkuData');
+    const dataList = existingData ? JSON.parse(existingData) : [];
+
+    // Fungsi untuk menampilkan video sesuai dengan URL
+    function playVideo(url) {
+      const videoPlayer = document.getElementById('video-player');
+      videoPlayer.src = url;
+      videoPlayer.load();
+    }
+
+    // Menampilkan menu list di index.html
+    const listContainer = document.getElementById('list-container');
+    dataList.forEach((item, index) => {
+      const menuItem = document.createElement('div');
+      menuItem.classList.add('square');
+      menuItem.textContent = item.video.title;
+      menuItem.style.backgroundColor = '#3498db';
+      menuItem.style.cursor = 'pointer';
+      menuItem.addEventListener('click', () => {
+        playVideo(item.video.url);
+      });
+      listContainer.appendChild(menuItem);
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Data</title>
+</head>
+
+<body>
+  <h1>Input Data</h1>
+  <form id="dataForm">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required><br>
+    <label for="url">URL:</label>
+    <input type="text" id="url" name="url" required><br>
+    <input type="submit" value="Submit">
+  </form>
+
+  <script>
+    document.getElementById('dataForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const title = document.getElementById('title').value;
+      const url = document.getElementById('url').value;
+
+      // Kirim data ke server atau build process menggunakan metode lain untuk menyimpan data ke listku.js
+      // Dalam lingkungan browser, JavaScript tidak dapat langsung menulis file lokal tanpa izin khusus.
+    });
+  </script>
+<!-- Kode yang sama seperti yang Anda berikan pada input.html -->
+<!-- ... -->
+
+<script>
+  document.getElementById('dataForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const title = document.getElementById('title').value;
+    const url = document.getElementById('url').value;
+
+    // Mendapatkan data yang sudah ada di Local Storage (jika ada)
+    const existingData = localStorage.getItem('listkuData');
+    const dataList = existingData ? JSON.parse(existingData) : [];
+
+    // Tambahkan data baru ke dataList
+    dataList.push({
+      "video": {
+        "title": title,
+        "url": url
+      }
+    });
+
+    // Simpan dataList ke Local Storage
+    localStorage.setItem('listkuData', JSON.stringify(dataList));
+
+    // Kembali ke halaman index.html setelah menyimpan data
+    window.location.href = 'index.html';
+  });
+</script>
+
+</body>
+
+</html>
